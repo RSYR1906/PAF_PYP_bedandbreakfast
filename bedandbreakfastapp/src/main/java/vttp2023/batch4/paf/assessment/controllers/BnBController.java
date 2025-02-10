@@ -1,5 +1,6 @@
 package vttp2023.batch4.paf.assessment.controllers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -88,31 +89,36 @@ public class BnBController {
 	// TODO: Task 6
 	@PostMapping("/accommodation")
 	public ResponseEntity<String> getNewBooking(@RequestBody Map<String, Object> bookingData) {
+		Map<String, Object> response = new HashMap<>();
 
-		// Extract data from request
-		String bookingId = (String) bookingData.get("bookingId");
-		String listingId = (String) bookingData.get("id");
-		String email = (String) bookingData.get("email");
-		String name = (String) bookingData.get("name");
+		try {
+			// Extract data from request
+			String listingId = (String) bookingData.get("id");
+			String email = (String) bookingData.get("email");
+			String name = (String) bookingData.get("name");
 
-		// Manually map "nights" to "duration"
-		int duration = (bookingData.get("nights") != null)
-				? ((Number) bookingData.get("nights")).intValue()
-				: 0;
+			// Manually map "nights" to "duration"
+			int duration = (bookingData.get("nights") != null)
+					? ((Number) bookingData.get("nights")).intValue()
+					: 0;
 
-		// Validate duration before inserting into DB
-		if (duration <= 0) {
-			return ResponseEntity.badRequest().body("{\"error\": \"Duration (nights) must be greater than 0\"}");
+			// Validate duration before inserting into DB
+			if (duration <= 0) {
+				return ResponseEntity.badRequest().body("{\"error\": \"Duration (nights) must be greater than 0\"}");
+			}
+
+			// Create Bookings object and insert into DB
+			Bookings booking = new Bookings();
+			booking.setDuration(duration);
+			booking.setListingId(listingId);
+			booking.setEmail(email);
+			booking.setName(name);
+			listingsSvc.createBooking(booking);
+
+			return ResponseEntity.ok("{}"); // Return empty JSON response
+		} catch (Exception e) {
+			response.put("error", "An unexpected error occurred: " + e.getMessage());
+			return ResponseEntity.status(500).body(response.toString());
 		}
-
-		// Create Bookings object and insert into DB
-		Bookings booking = new Bookings();
-		booking.setDuration(duration);
-		booking.setListingId(listingId);
-		booking.setEmail(email);
-		booking.setName(name);
-		listingsSvc.createBooking(booking);
-
-		return ResponseEntity.ok("{}"); // Return empty JSON response
 	}
 }
