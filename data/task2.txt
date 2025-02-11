@@ -1,8 +1,7 @@
 Write your Task 2 answers in this file
 
 Task 2.1:
-mongoimport --host localhost --port 27017 --db bedandbreakfast --collection listings_and_reviews --type json --file listings.json
-
+mongoimport --uri "mongodb://mongo:TwhPNsbaQJcMayGAricmCnNAwwNGbVTf@viaduct.proxy.rlwy.net:46767/bedandbreakfast" --collection=listings_and_reviews --type=json --file=listings.json --authenticationDatabase=admin
 
 Task 2.2:
 db.listings_and_reviews.aggregate([
@@ -59,4 +58,4 @@ db.listings.aggregate([
 ]);
 
 Task 2.5:
-mongoexport --uri='mongodb://localhost:27017/bedandbreakfast' --collection=reviews --db=bedandbreakfast --type=csv --fields=date,listing_id,reviewer_name,comments --out=reviews.csv
+mongoexport --uri "mongodb://mongo:TwhPNsbaQJcMayGAricmCnNAwwNGbVTf@viaduct.proxy.rlwy.net:46767/bedandbreakfast" --collection=reviews --db=bedandbreakfast --type=csv --fields=date,listing_id,reviewer_name,comments --out=reviews.csv --authenticationDatabase=admin
