@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import vttp2023.batch4.paf.assessment.models.Accommodation;
 import vttp2023.batch4.paf.assessment.models.AccommodationSummary;
@@ -60,17 +61,23 @@ public class ListingsService {
 	// TODO: Task 6
 	// IMPORTANT: DO NOT MODIFY THE SIGNATURE OF THIS METHOD.
 	// You may only add annotations and throw exceptions to this method
+	@Transactional
 	public void createBooking(Bookings booking) {
-		// Check if user exists in the database
-		Optional<User> existingUser = bookingsRepo.userExists(booking.getEmail());
+		try {
+			// Check if user exists in the database
+			Optional<User> existingUser = bookingsRepo.userExists(booking.getEmail());
 
-		// If user does not exist, create a new user
-		if (existingUser.isEmpty()) {
-			bookingsRepo.newUser(new User(booking.getEmail(), booking.getName()));
+			// If user does not exist, create a new user
+			if (existingUser.isEmpty()) {
+				bookingsRepo.newUser(new User(booking.getEmail(), booking.getName()));
+			}
+
+			// Create the new booking
+			bookingsRepo.newBookings(booking);
+
+		} catch (Exception e) {
+			throw new RuntimeException("Booking failed: " + e.getMessage(), e);
 		}
-
-		// Create the new booking
-		bookingsRepo.newBookings(booking);
 	}
 
 }

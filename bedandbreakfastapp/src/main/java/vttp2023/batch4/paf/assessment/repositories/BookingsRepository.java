@@ -17,7 +17,8 @@ public class BookingsRepository {
 
 	public static final String SQL_SELECT_USER_BY_EMAIL = "select * from users where email like ?";
 
-	public static final String SQL_INSERT_NEW_USER = "insert into users (name,email) values(?,?)";
+	public static final String SQL_INSERT_NEW_USER = "INSERT INTO users (name, email) VALUES (?, ?) " +
+			"ON DUPLICATE KEY UPDATE name = VALUES(name)";;
 
 	public static final String SQL_INSERT_NEW_BOOKING = "insert into bookings (booking_id,listing_id,duration,email) values(?,?,?,?)";
 

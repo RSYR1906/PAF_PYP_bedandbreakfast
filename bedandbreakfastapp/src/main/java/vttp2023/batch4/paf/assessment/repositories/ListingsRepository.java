@@ -34,7 +34,6 @@ public class ListingsRepository {
 	// $match: {
 	// "address.country" : {$regex : "Australia", $options : "i"} ,
 	// "address.suburb": { $exists: true, $ne: null, $ne: "" }
-
 	// }
 	// },
 	// {

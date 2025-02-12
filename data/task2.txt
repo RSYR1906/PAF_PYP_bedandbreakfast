@@ -9,7 +9,7 @@ db.listings_and_reviews.aggregate([
         $match: { "address.country": { $regex: "Australia", $options: "i" } }
     },
     {
-        $out: "listings" // Creates the "listings" collection with the filtered data
+        $out: "listings"
     }
 ]);
 
@@ -52,10 +52,7 @@ db.listings.aggregate([
 ]);
 
 Task 2.4:
-db.listings.aggregate([
-  { $unset: "reviews" },
-  { $out: "listings" }
-]);
+db.listings.updateMany({}, { $unset: { reviews: "" } });
 
 Task 2.5:
 mongoexport --uri "mongodb://mongo:TwhPNsbaQJcMayGAricmCnNAwwNGbVTf@viaduct.proxy.rlwy.net:46767/bedandbreakfast" --collection=reviews --db=bedandbreakfast --type=csv --fields=date,listing_id,reviewer_name,comments --out=reviews.csv --authenticationDatabase=admin
